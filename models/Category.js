@@ -2,34 +2,21 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 const Schema = mongoose.Schema;
 
-const CourseSchema = new Schema({
+const CategorySchema = new Schema({
   name: {
     type: String,
     unique: true,
     required: true,
   },
-  description: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  createdDate: {
-    type: Date,
-    default: Date.now,
-  },
   slug: {
     type: String,
     required: true,
   },
-  category: {
-    type: mongoose.Schema.Types.ObjectId, //DB'den alınan kategoriler veri olarak alınacak
-    ref: 'Category',
-  }
 });
 
 // döküman oluşturmadan önce yapılacak işlemler
 // arrow function'larda THIS kullanılMAZ.
-CourseSchema.pre('validate', function (next) {
+CategorySchema.pre('validate', function (next) {
   this.slug = slugify(this.name, {
     lower: true, // sadece küçük harflerden oluşmasını sağlar
     strict: true, // içindeki gereksiz karakterleri kaldırır
@@ -37,6 +24,6 @@ CourseSchema.pre('validate', function (next) {
   next(); // bir sonraki middleware'ye geçmesi için
 });
 
-const Course = mongoose.model('Course', CourseSchema);
+const Category = mongoose.model('Category', CategorySchema);
 
-module.exports = Course;
+module.exports = Category;
